@@ -3,15 +3,25 @@ import { useNavigate } from "react-router-dom";
 import Form from "../../../components/form/Form";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import app from "../../../firebase";
+import { useDispatch } from "react-redux";
+import { setUsers } from "../../../store/user/user.slice";
 
 const SignIn = () => {
   const navegate = useNavigate();
   const [firebaseError, setFirebaseError] = useState("");
+  const dispatch = useDispatch();
 
   const auth = getAuth(app);
   const handleLogin = (email, password) => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((user) => {
+      .then((userCredential) => {
+        dispatch(
+          setUsers({
+            email: userCredential.user.email,
+            token: userCredential.user.refreshToken,
+            id: userCredential.user.uid,
+          })
+        );
         navegate("/");
       })
       .catch((error) => {
