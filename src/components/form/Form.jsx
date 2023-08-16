@@ -1,7 +1,7 @@
 import styles from "./Form.module.scss";
 import { useForm } from "react-hook-form";
 
-const Form = ({ title }) => {
+const Form = ({ title, firebaseError, getDataForm }) => {
   const {
     register,
     handleSubmit,
@@ -12,7 +12,8 @@ const Form = ({ title }) => {
   });
 
   const onSubmit = ({ email, password }) => {
-    console.log(email, password);
+    getDataForm(email, password);
+    reset();
   };
 
   const userEmail = {
@@ -23,8 +24,8 @@ const Form = ({ title }) => {
   const userPassword = {
     required: "필수 입력 사항입니다.",
     minLength: {
-      value: 4,
-      message: "4자리 이상 입력해주세요.",
+      value: 6,
+      message: "6자리 이상 입력해주세요.",
     },
   };
 
@@ -55,7 +56,9 @@ const Form = ({ title }) => {
         )}
       </div>
       <button type="submit">{title}</button>
-      <span className={styles.form_error}></span>
+      {firebaseError && (
+        <span className={styles.form_error}> {firebaseError} </span>
+      )}
     </form>
   );
 };
