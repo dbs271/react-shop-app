@@ -3,11 +3,16 @@ import axios from "axios";
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async (thunkAPI) => {
-    console.log(thunkAPI);
-
+  async (category, thunkAPI) => {
     try {
-      const res = await axios.get("https://fakestoreapi.com/products");
+      let res;
+      if (category) {
+        res = await axios.get(
+          `https://fakestoreapi.com/products/category/${category}`
+        );
+      } else {
+        res = await axios.get("https://fakestoreapi.com/products");
+      }
       console.log("@@@", res);
       return res.data;
     } catch (error) {
