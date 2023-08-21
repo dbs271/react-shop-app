@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { useAuth } from "../../../hooks/useAuth";
-import { getTotalPrice } from "../../../store/cart/cart.slice";
+import { getTotalPrice, postOrder } from "../../../store/cart/cart.slice";
 import styles from "./Checkout.module.scss";
 
 const Checkout = () => {
@@ -15,6 +15,10 @@ const Checkout = () => {
 
   const { isAuth } = useAuth();
 
+  const sendOrder = () => {
+    dispatch(postOrder(cart));
+  };
+
   return (
     <div className={styles.checkout}>
       <div>
@@ -23,7 +27,12 @@ const Checkout = () => {
           <span>합계:</span> $ {cart.totalPrice.toFixed(2)}
         </p>
         {isAuth ? (
-          <button className={styles.checkout_button}>계산하기</button>
+          <button
+            className={styles.checkout_button}
+            onClick={() => sendOrder()}
+          >
+            계산하기
+          </button>
         ) : (
           <Link className={styles.checkout_button} to="/login">
             로그인
